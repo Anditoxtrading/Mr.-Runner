@@ -1,4 +1,4 @@
-Mr. Runner es un bot de trading diseñado para maximizar ganancias mediante una estrategia dinámica y eficiente basada en puntos clave del mercado. Utilizando la información del libro de órdenes, Mr. Runner identifica puntos estratégicos, llamados "puntos shock", tanto para operaciones long como short. Estos puntos representan áreas críticas en el mercado donde es más probable que ocurra un cambio significativo en el precio.
+Mr. Runner es un bot de trading diseñado para maximizar ganancias mediante una estrategia dinámica y eficiente basada en puntos clave del mercado. 
 
 ¿Cómo funciona Mr. Runner?
 Definición de puntos shock:
