@@ -83,7 +83,7 @@ def stop_ganancias(symbol): # Stop loss en ganancias
             category="linear",
             symbol=symbol,
             stopLoss=str(price_sl), 
-            slTriggerBy="IndexPrice", 
+            slTriggerBy="LastPrice", 
             tpslMode="Full",
             slOrderType="Market",
         )
@@ -134,7 +134,7 @@ def abrir_posicion_largo(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             category="linear",
             symbol=symbol,
             stopLoss=price_sl,
-            slTriggerB="IndexPrice",
+            slTriggerB="LastPrice",
             tpslMode="Full",
             slOrderType="Market",
         )
@@ -181,7 +181,7 @@ def abrir_posicion_corto(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             category="linear",
             symbol=symbol,
             stopLoss=price_sl,
-            slTriggerB="IndexPrice",
+            slTriggerB="LastPrice",
             tpslMode="Full",
             slOrderType="Market",
         )
