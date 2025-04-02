@@ -20,3 +20,7 @@ Protección inteligente: Garantiza que siempre se asegure al menos el beneficio 
 Maximización de ganancias: Permite que las operaciones exitosas sigan creciendo sin restricciones innecesarias.
 Ejecución precisa: Opera automáticamente en puntos clave definidos por el análisis del libro de órdenes.
 Flexibilidad: Te permite personalizar los puntos shock y el porcentaje de stop loss según tu estrategia.
+
+
+pip install pybit 
+pyTelegramBotAPI
