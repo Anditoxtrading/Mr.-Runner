@@ -298,7 +298,7 @@ def tomar_decision(file_path):
                     print(f"Error al tomar decisión para {symbol}: {e}")
         
         # Retornar a la lectura del archivo para verificar si hubo cambios
-        time.sleep(5)  # Espera de 5 segundos antes de volver a leer el archivo
+        time.sleep(2)  # Espera de 2 segundos antes de volver a leer el archivo
 
 
 def monitorear_posiciones(distancia_porcentaje_favor):
