@@ -89,7 +89,7 @@ def stop_ganancias(symbol): # Stop loss en ganancias
         )
 
         # Enviar mensaje y mostrar resultado
-        mensaje = f"Protección con stop loss en {symbol} colocado con éxito: {stop_loss_order}"
+        mensaje = f"Protección con stop loss en colocado con éxito: {stop_loss_order}"
         enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje)
         print(mensaje)
     
@@ -117,11 +117,8 @@ def abrir_posicion_largo(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             orderType="Market",
             qty=base_asset_qty_final,
         )
-        Mensaje_market = f"Orden Market Long en {symbol} abierta con éxito: {response_market_order}"
-        enviar_mensaje_telegram(chat_id=chat_id, mensaje=Mensaje_market)
-        print(Mensaje_market)
-
-        time.sleep(5)
+    
+        time.sleep(3)
         if response_market_order['retCode'] != 0:
             print("Error al abrir la posición: La orden de mercado no se completó correctamente.")
             return
@@ -138,9 +135,15 @@ def abrir_posicion_largo(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             tpslMode="Full",
             slOrderType="Market",
         )
-        mensaje_sl = f"Stop Loss para {symbol} colocado con éxito: {stop_loss_order}"
-        enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje_sl)
-        print(mensaje_sl)
+
+        Mensaje_market = (
+            f"<b>🟢¡ORDEN LONG ABIERTA!</b>\n"
+            f"🔹 Ticker: <b>{symbol}</b>\n"
+            f"🛡️ Stop Loss colocado con éxito: {stop_loss_order}\n"
+            f"✅ Estado: <i>Abierta con éxito</i>"
+        )
+        enviar_mensaje_telegram(chat_id=chat_id, mensaje=Mensaje_market)
+        print(Mensaje_market)
     except Exception as e:
         print(f"Error al abrir la posición: {e}")
 
@@ -164,11 +167,7 @@ def abrir_posicion_corto(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             orderType="Market",
             qty=base_asset_qty_final,
         )
-        Mensaje_market = f"Orden Market Short en {symbol} abierta con éxito: {response_market_order}"
-        enviar_mensaje_telegram(chat_id=chat_id, mensaje=Mensaje_market)
-        print(Mensaje_market)
-
-        time.sleep(5)
+        time.sleep(3)
         if response_market_order['retCode'] != 0:
             print("Error al abrir la posición: La orden de mercado no se completó correctamente.")
             return
@@ -185,9 +184,15 @@ def abrir_posicion_corto(symbol, base_asset_qty_final, distancia_porcentaje_sl):
             tpslMode="Full",
             slOrderType="Market",
         )
-        mensaje_sl = f"Stop Loss para {symbol} colocado con éxito: {stop_loss_order}"
-        enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje_sl)
-        print(mensaje_sl)
+        Mensaje_market = (
+            f"<b>🔴 ¡ORDEN SHORT ABIERTA!</b>\n"
+            f"🔹 Ticker: <b>{symbol}</b>\n"
+            f"Stop Loss colocando con exito: {stop_loss_order}"
+            f"✅ Estado: <i>Abierta con éxito</i>"
+        )
+
+        enviar_mensaje_telegram(chat_id=chat_id, mensaje=Mensaje_market)
+        print(Mensaje_market)
     except Exception as e:
         print(f"Error al abrir la posición: {e}")
 
@@ -270,7 +275,7 @@ def tomar_decision(file_path):
                         base_asset_qty_final = qty_step(symbol, amount_usdt)
                         abrir_posicion_largo(symbol, base_asset_qty_final, distancia_porcentaje_sl)
                         monitoreados.add(symbol)  # Marcar la moneda como procesada
-                        mensaje_monitor = f"Precio llegando a punto Target Long {symbol} a {last_price}. Dejando de monitorear."
+                        mensaje_monitor = f"⚠️ Precio llegando a punto Target Long {symbol} a {last_price}. Dejando de monitorear."
                         enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje_monitor)
                         print(mensaje_monitor)
 
@@ -278,7 +283,7 @@ def tomar_decision(file_path):
                         base_asset_qty_final = qty_step(symbol, amount_usdt)
                         abrir_posicion_corto(symbol, base_asset_qty_final, distancia_porcentaje_sl)
                         monitoreados.add(symbol)  # Marcar la moneda como procesada
-                        mensaje_monitor = f"Precio llegando a punto Target Short {symbol} a {last_price}. Dejando de monitorear."
+                        mensaje_monitor = f"⚠️ Precio llegando a punto Target Short {symbol} a {last_price}. Dejando de monitorear."
                         enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje_monitor)
                         print(mensaje_monitor)
 
@@ -331,9 +336,11 @@ def monitorear_posiciones(distancia_porcentaje_favor):
 
                 # Si el avance a favor cumple la condición y no se ha colocado stop loss aún
                 if avance_porcentaje >= distancia_porcentaje_favor and symbol not in posiciones_con_stop:
-                    print(
-                        f"El precio de {symbol} ha avanzado un {avance_porcentaje:.2f}% a favor de la posición. Ajustando stop loss..."
+                    mensaje=(
+                        f"🛡️Stop loss en ganancias en {symbol} Porcentaje a Favor: {avance_porcentaje:.2f}%  Ajustando stop loss..."
                     )
+                    enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje)
+                    print (mensaje)
 
                     # Cancelar solo las órdenes de Stop Loss asociadas a la posición
                     # Se asume que el stop loss tiene una orden activa
@@ -348,7 +355,6 @@ def monitorear_posiciones(distancia_porcentaje_favor):
 
                     # Colocar el stop loss en ganancia (ajustado)
                     stop_ganancias(symbol)
-                    print(f"Stop loss en ganancia colocado para {symbol}.")
 
                     # Marcar que ya se ha colocado el stop loss para esta posición
                     posiciones_con_stop[symbol] = True
@@ -357,6 +363,50 @@ def monitorear_posiciones(distancia_porcentaje_favor):
             print(f"Error al monitorear posiciones: {e}")
 
         time.sleep(5)  # Revisión cada 5 segundos
+def notificar_pnl_cerrado():
+    ultimo_order_id_reportado = None
+
+    while True:
+        try:
+            response = session.get_closed_pnl(category="linear", limit=1)
+            if response["retCode"] == 0 and response["result"]["list"]:
+                ultimo_pnl = response["result"]["list"][0]
+                order_id = ultimo_pnl["orderId"]
+
+                if ultimo_order_id_reportado is None:
+                    # Inicializamos la variable sin enviar mensaje,
+                    # para ignorar el último PNL viejo al iniciar el bot
+                    ultimo_order_id_reportado = order_id
+                elif order_id != ultimo_order_id_reportado:
+                    symbol = ultimo_pnl["symbol"]
+                    closed_pnl = Decimal(ultimo_pnl["closedPnl"]).quantize(Decimal("0.01"))
+                    side = ultimo_pnl["side"]
+                    if closed_pnl >= 0:
+                        mensaje = (
+                            f"<b>✅ ¡Operación cerrada en ganancia!</b> 🎉💰\n"
+                            f"Símbolo: <b>{symbol}</b>\n"
+                            f"Lado: <b>{side}</b>\n"
+                            f"PNL: <b>+{closed_pnl} USDT</b>"
+                        )
+                    else:
+                        mensaje = (
+                            f"<b>😢 Operación cerrada en pérdida</b> 😢💸\n"
+                            f"Símbolo: <b>{symbol}</b>\n"
+                            f"Lado: <b>{side}</b>\n"
+                            f"PNL: <b>{closed_pnl} USDT</b>"
+                        )
+
+                    enviar_mensaje_telegram(chat_id=chat_id, mensaje=mensaje)
+                    print(f"PNL notificado: {mensaje}")
+
+                    ultimo_order_id_reportado = order_id
+
+        except Exception as e:
+            print(f"Error al obtener PNL cerrado: {e}")
+
+        time.sleep(10)
+
+
 if __name__ == "__main__":
     file_path = 'symbols_targets.txt'
     distancia_porcentaje_favor = distancia_porcentaje_sl * 2 * 100
@@ -364,6 +414,9 @@ if __name__ == "__main__":
     # Hilo para la función 'tomar_decision'
     tomar_decision_thread = threading.Thread(target=tomar_decision, args=(file_path,))
     tomar_decision_thread.start()
+    # Hilo para notificar PNL cuando se cierre una posición
+    pnl_thread = threading.Thread(target=notificar_pnl_cerrado)
+    pnl_thread.start()
 
     # Hilo para la función 'monitorear_posiciones' con el argumento necesario
     monitor_position_thread = threading.Thread(target=monitorear_posiciones, args=(distancia_porcentaje_favor,))
