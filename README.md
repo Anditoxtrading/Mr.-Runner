@@ -22,5 +22,28 @@ Ejecución precisa: Opera automáticamente en puntos clave definidos por el aná
 Flexibilidad: Te permite personalizar los puntos shock y el porcentaje de stop loss según tu estrategia.
 
 
-pip install pybit 
-pyTelegramBotAPI
+## 📚 Documentación
+
+Para aprender a usar Mr. Runner de forma completa, consulta nuestro **[Tutorial Completo](TUTORIAL.md)** que incluye:
+
+- 📦 Instalación paso a paso
+- ⚙️ Configuración detallada
+- 🎯 Cómo definir puntos shock
+- 🚀 Ejecución y monitoreo
+- 💡 Ejemplos prácticos
+- 🔧 Solución de problemas
+- ✨ Mejores prácticas
+
+## 🚀 Instalación Rápida
+
+```bash
+pip install pybit pyTelegramBotAPI
+```
+
+## ⚙️ Configuración
+
+1. Copia `config.py.example` a `config.py` y completa tus credenciales
+2. Copia `symbols_targets.txt.example` a `symbols_targets.txt` y define tus puntos shock
+3. Ejecuta: `python "Mr Runner.py"`
+
+Para más detalles, consulta el [Tutorial Completo](TUTORIAL.md).
