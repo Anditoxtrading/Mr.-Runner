@@ -1,0 +1,42 @@
+# symbols_targets.txt.example
+# Copia este archivo a "symbols_targets.txt" y ajusta los precios según tu análisis
+
+# ==============================================
+# FORMATO
+# ==============================================
+# SIMBOLO PRECIO_LONG PRECIO_SHORT
+#
+# - SIMBOLO: Par de trading (ej: BTCUSDT)
+# - PRECIO_LONG: Precio para abrir posición larga (compra)
+# - PRECIO_SHORT: Precio para abrir posición corta (venta)
+#
+# IMPORTANTE:
+# - El PRECIO_LONG debe ser MENOR que el PRECIO_SHORT
+# - Usa espacios para separar los valores
+# - Una línea por símbolo
+# ==============================================
+
+# Ejemplo 1: Bitcoin con rango amplio (swing trading)
+BTCUSDT 94000 96000
+
+# Ejemplo 2: Ethereum con rango medio
+ETHUSDT 3400 3600
+
+# Ejemplo 3: Altcoins mayores
+BNBUSDT 620 640
+SOLUSDT 180 190
+ADAUSDT 0.95 1.05
+
+# Ejemplo 4: Trading ajustado (scalping)
+# XRPUSDT 2.15 2.20
+# DOGEUSDT 0.38 0.40
+
+# ==============================================
+# NOTAS IMPORTANTES
+# ==============================================
+# - Basa tus precios en análisis técnico sólido
+# - Identifica soportes y resistencias clave
+# - Consulta el libro de órdenes
+# - Actualiza regularmente según el mercado
+# - El bot lee este archivo cada 2 segundos
+# ==============================================
